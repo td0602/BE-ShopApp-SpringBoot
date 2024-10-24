@@ -1,0 +1,7 @@
+server:
+  port: 8088
+spring:
+  servlet:
+    multipart: # ngoài vi?c ki?m tra max size trong code ta có th? check trong này
+      max-file-size: 10MB
+      max-request-size: 10MB
