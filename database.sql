@@ -64,6 +64,16 @@ create table products(
     category_id int,
     foreign key (category_id) references products(id)
 );
+-- Bảng chứ danh sách các ảnh của products
+create table product_images(
+    id int primary key auto_increment,
+    product_id int, 
+    foreign key (product_id) references products(id),
+    -- ràng buộc nếu product bị xóa thì product_images cũng bị xóa theo: cascade
+    constraint fk_product_images_product_id
+        foreign key (product_id) references products (id) on delete cascade,
+    image_url varchar(300)
+);
 -- Bảng đặt hàng
 -- tại sao bảng users có fullname/email ... rồi lại cần fullname ở đây? khi đặt hàng thông tin
 -- đặt hàng có thể khác tên/email ...

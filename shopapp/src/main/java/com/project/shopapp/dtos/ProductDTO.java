@@ -8,12 +8,15 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Data //to String
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDTO {
+public class ProductDTO{
     @NotBlank(message = "Title is required")
     @Size(min = 3, max = 200, message = "Title must be between 3 and 200 character")
     private String name;
@@ -24,6 +27,6 @@ public class ProductDTO {
     private String description;
     @JsonProperty("category_id") // map đúng với category_id trong DB
     private String categoryId;
-    MultipartFile file;
+    private List<MultipartFile> files;
 
 }

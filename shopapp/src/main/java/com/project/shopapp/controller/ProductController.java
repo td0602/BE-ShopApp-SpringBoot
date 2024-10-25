@@ -18,11 +18,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("${api.prefix}/products")
 public class ProductController {
     @GetMapping("")
     public ResponseEntity<String> getAllProducts() {
@@ -33,7 +34,7 @@ public class ProductController {
     // dung lượng
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createProduct(
-            @Valid @RequestBody ProductDTO productDTO,
+            @Valid @ModelAttribute ProductDTO productDTO,
 //            @RequestPart("file") MultipartFile file,
             BindingResult result
             ) {
@@ -45,24 +46,27 @@ public class ProductController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
-            MultipartFile file = productDTO.getFile();
-            if(file != null) {
-                // kiểm tra kích thước file
-                if(file.getSize() > 10 * 1024 * 1024) {//kích thước  > 10MB
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-                            .body("File is too large! Maximum size is 10MB");
-                }
-                // check định dạng file
-                String contentType = file.getContentType();
-                if(contentType == null || contentType.startsWith("image/")) {
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                            .body("File must be an image");
-                }
-                // lưu file và cập nhật thumbnail trong DTO
-                String filename = storeFile(file);
-                // lưu vào đối tượng product trong DB
-            }
+            List<MultipartFile> files = productDTO.getFiles() != null ? productDTO.getFiles() : new ArrayList<MultipartFile>();
 
+            for(MultipartFile file: files) {
+                if(file != null) {
+                    if(file.getSize() == 0) continue;
+                    // kiểm tra kích thước file
+                    if(file.getSize() > 10 * 1024 * 1024) {//kích thước  > 10MB
+                        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+                                .body("File is too large! Maximum size is 10MB");
+                    }
+                    // check định dạng file
+                    String contentType = file.getContentType();
+                    if(contentType == null || !contentType.startsWith("image/")) {
+                        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                                .body("File must be an image");
+                    }
+                    // lưu file và cập nhật thumbnail trong DTO
+                    String filename = storeFile(file);
+                    // lưu vào đối tượng product trong DB product_images
+                }
+            }
             return ResponseEntity.ok("Product created successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

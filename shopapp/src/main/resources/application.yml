@@ -2,6 +2,9 @@ server:
   port: 8088
 spring:
   servlet:
-    multipart: # ngoài vi?c ki?m tra max size trong code ta có th? check trong này
+    multipart: # ngoï¿½i vi?c ki?m tra max size trong code ta cï¿½ th? check trong nï¿½y
       max-file-size: 10MB
       max-request-size: 10MB
+# cau hinh cac version di theo URL -> tao bien moi truong
+api:
+  prefix: api/v1
