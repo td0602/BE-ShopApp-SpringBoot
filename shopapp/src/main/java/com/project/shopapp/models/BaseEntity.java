@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass // dung chung cho cacs Entities
+//@Builder //ham khoi tao tung thanh phan
 public class BaseEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;

@@ -1,5 +1,6 @@
 package com.project.shopapp.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "products")
+@Builder //ham khoi tao tung thanh phan
 public class Product extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,5 +23,7 @@ public class Product extends BaseEntity{
     @Column(length = 300)
     private String thumbnail;
     private String description;
-
+    @ManyToOne
+    @JsonProperty("category_id")
+    private Category category;
 }

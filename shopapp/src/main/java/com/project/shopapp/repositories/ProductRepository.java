@@ -8,5 +8,5 @@ import java.awt.print.Pageable;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     boolean existsByName(String title);
-    Page<Product> findAll(Pageable pageable);
+//    Page<Product> findAll(Pageable pageable);
 }

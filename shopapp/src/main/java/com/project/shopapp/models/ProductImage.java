@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder //ham khoi tao tung thanh phan
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

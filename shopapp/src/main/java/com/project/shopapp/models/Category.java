@@ -11,6 +11,7 @@ import org.hibernate.annotations.ValueGenerationType;
 @Getter
 @Setter
 @Table(name = "categories")
+@Builder //ham khoi tao tung thanh phan
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
