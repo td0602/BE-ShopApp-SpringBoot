@@ -62,7 +62,7 @@ create table products(
     created_at datetime,
     updated_at datetime,
     category_id int,
-    foreign key (category_id) references products(id)
+    foreign key (category_id) references categories(id)
 );
 -- Bảng chứ danh sách các ảnh của products
 create table product_images(

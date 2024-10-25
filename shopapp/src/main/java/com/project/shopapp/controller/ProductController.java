@@ -2,7 +2,13 @@ package com.project.shopapp.controller;
 
 import ch.qos.logback.core.util.StringUtil;
 import com.project.shopapp.dtos.ProductDTO;
+import com.project.shopapp.dtos.ProductImageDTO;
+import com.project.shopapp.models.Product;
+import com.project.shopapp.models.ProductImage;
+import com.project.shopapp.services.IProductService;
+import com.project.shopapp.services.ProductService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +29,10 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
+    private final IProductService productService;
     @GetMapping("")
     public ResponseEntity<String> getAllProducts() {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
@@ -32,9 +40,9 @@ public class ProductController {
 
     // MULTIPART_FORM_DATA_VALUE khi upload file lên sẽ được chuyển từng phần
     // dung lượng
-    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "")
     public ResponseEntity<?> createProduct(
-            @Valid @ModelAttribute ProductDTO productDTO,
+            @Valid @RequestBody ProductDTO productDTO,
 //            @RequestPart("file") MultipartFile file,
             BindingResult result
             ) {
@@ -46,8 +54,22 @@ public class ProductController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
-            List<MultipartFile> files = productDTO.getFiles() != null ? productDTO.getFiles() : new ArrayList<MultipartFile>();
+            Product newProduct = productService.createProduct(productDTO);
 
+            return ResponseEntity.ok(newProduct);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @PostMapping(value = "uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    private ResponseEntity<?> uploadimages(
+            @PathVariable("id") Long productId,
+            @ModelAttribute("files") List<MultipartFile> files
+    ) {
+        try {
+            Product existingProduct = productService.getProductById(productId);
+            files = files != null ? files : new ArrayList<MultipartFile>(); // tranh null
+            List<ProductImage> productImages = new ArrayList<>();
             for(MultipartFile file: files) {
                 if(file != null) {
                     if(file.getSize() == 0) continue;
@@ -65,9 +87,17 @@ public class ProductController {
                     // lưu file và cập nhật thumbnail trong DTO
                     String filename = storeFile(file);
                     // lưu vào đối tượng product trong DB product_images
+                    ProductImage productImage = productService.createProductImage(
+                            existingProduct.getId(),
+                            ProductImageDTO.builder()
+                                    .productId(existingProduct.getId())
+                                    .imageUrl(filename)
+                                    .build()
+                    );
+                    productImages.add(productImage);
                 }
             }
-            return ResponseEntity.ok("Product created successfully");
+            return ResponseEntity.ok().body(productImages);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
