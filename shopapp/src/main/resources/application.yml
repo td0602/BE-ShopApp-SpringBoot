@@ -1,10 +1,29 @@
 server:
   port: 8088
 spring:
+  datasource:
+#   timezone:UTC -> GMT+0, VietNam laf GMT+7 con len server +0
+    url: jdbc:mysql://localhost:3306/shopapp?useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+#      cau lenh tao bang trong java Spring se khong tu dong tao bang trong CSDL nua
+#      tuc la cac cau lenh them cot, tao bang phai thuc hien trong cau lenh SQL
+#      khong cho phep Java Spring thao tac -> nguy hiem
+      ddl-auto: none
+    properties:
+      hibernate:
+#        Driver de ket noi CSDL
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
   servlet:
     multipart: # ngo�i vi?c ki?m tra max size trong code ta c� th? check trong n�y
       max-file-size: 10MB
       max-request-size: 10MB
+
 # cau hinh cac version di theo URL -> tao bien moi truong
 api:
   prefix: api/v1
