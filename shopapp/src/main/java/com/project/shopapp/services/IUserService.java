@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface IUserService{
     User createUser(UserDTO userDTO) throws DataNotFoundException;
 //    tra ve token
-    String login(String phoneNumber, String password);
+    String login(String phoneNumber, String password) throws Exception;
 }

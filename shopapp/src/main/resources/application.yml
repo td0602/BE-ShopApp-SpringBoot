@@ -27,3 +27,7 @@ spring:
 # cau hinh cac version di theo URL -> tao bien moi truong
 api:
   prefix: api/v1
+jwt:
+  expiration: 2592000 # 30 days = 30 * 24 * 60 * 60
+  secretKey: neMfzBRCIcXhE5k6LQXmHa1gFZCXq4fUIvlxzDHrCh8=
+
