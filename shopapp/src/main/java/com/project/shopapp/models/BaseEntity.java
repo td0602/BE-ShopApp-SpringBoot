@@ -26,7 +26,4 @@ public class BaseEntity {
     protected  void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
 }

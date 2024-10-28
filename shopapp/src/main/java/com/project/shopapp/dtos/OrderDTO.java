@@ -9,6 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @Setter
@@ -16,21 +20,29 @@ import lombok.Setter;
 public class OrderDTO {
     @JsonProperty("user_id")
     @Min(value = 1, message = "User's ID must be > 0")
-    private int userId;
+    private Long userId;
+
     @JsonProperty("fullname")
     private String fullName;
     private String email;
+
     @JsonProperty("phone_number")
     @NotBlank(message = "Phone number is reuquired")
     @Size(min = 5, message = "Phone number must be at least 5 characters")
     private String phoneNumber;
     private String address;
     private String note;
+
     @JsonProperty("total_money")
     @Min(value = 0, message = "Total money must be >= 0")
     private Float totalMoney;
+
     @JsonProperty("shipping_address")
     private String shippingAddress;
+
+    @JsonProperty("shipping_date")
+    private LocalDate shipingDate;
+
     @JsonProperty("payment_method")
     private String paymentMethod;
 }

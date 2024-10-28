@@ -12,6 +12,7 @@ import lombok.*;
 @Setter
 @Builder //ham khoi tao tung thanh phan
 public class ProductImage {
+    public static final int MAXIMUM_IMAGES_PER_PRODUCT = 5;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
