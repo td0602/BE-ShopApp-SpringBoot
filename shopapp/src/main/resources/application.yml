@@ -23,6 +23,11 @@ spring:
     multipart: # ngo�i vi?c ki?m tra max size trong code ta c� th? check trong n�y
       max-file-size: 10MB
       max-request-size: 10MB
+#  cau hinh UTF-8 de tra ve cho response
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+    default-locale: en
 
 # cau hinh cac version di theo URL -> tao bien moi truong
 api:
