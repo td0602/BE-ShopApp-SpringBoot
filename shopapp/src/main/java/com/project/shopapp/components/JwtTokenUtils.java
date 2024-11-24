@@ -33,9 +33,11 @@ public class JwtTokenUtils {
         // properties => claims (cac thuoc tinh cua user)
         Map<String, Object> claims = new HashMap<>();
 //        this.generateSecretKey();
+        // truyền các tham số sau vào token (clame)
         claims.put("phoneNumber", user.getPhoneNumber());
+        claims.put("userId", user.getId());
         try {
-            return Jwts.builder()
+            String token = Jwts.builder()
                     .setClaims(claims) // how to extract claims from this? (1)
                     .setSubject(user.getPhoneNumber())
                     .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
@@ -43,6 +45,7 @@ public class JwtTokenUtils {
 //                    truyen secretKey de co the lay ra cac claims trong token, tuc de xem trong token chua cai j
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
+            return token;
         } catch (Exception e) {
             // You can use Logger, instead System.out.println
             throw new InvalidParamException("Cannot create jwt token, error: " + e.getMessage());

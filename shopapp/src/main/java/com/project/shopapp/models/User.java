@@ -48,6 +48,7 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        "ROLE_" role theo nghĩa của java Spring
         authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole().getName().toUpperCase()));
 //        authorities.add(new SimpleGrantedAuthority("ROLE_USER")); // cap quyen ADMIN cho tk hien tai
         return authorities;

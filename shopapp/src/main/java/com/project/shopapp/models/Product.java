@@ -1,10 +1,13 @@
 package com.project.shopapp.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -26,4 +29,11 @@ public class Product extends BaseEntity{
     @ManyToOne
     @JsonProperty("category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductImage> productImages;
+
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<Comment> comments = new ArrayList<>();
 }

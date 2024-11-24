@@ -74,14 +74,30 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     }
 
+    // nếu isBypassToken = false --> sẽ phải kiểm tra token
     private boolean isBypassToken(@NotNull HttpServletRequest request) {
         //        cho pass token
         final List<Pair<String, String>> bypassTokens = Arrays.asList(
                 Pair.of(String.format("%s/products", apiPrefix), "GET"),
+//                Pair.of(String.format("%s/products/**", apiPrefix), "GET"),
+                Pair.of(String.format("%s/products/by-ids", apiPrefix), "GET"),
+                Pair.of(String.format("%s/orders", apiPrefix), "GET"),
                 Pair.of(String.format("%s/categories", apiPrefix), "GET"),
                 Pair.of(String.format("%s/users/register", apiPrefix), "POST"),
-                Pair.of(String.format("%s/users/login", apiPrefix), "POST")
+                Pair.of(String.format("%s/users/login", apiPrefix), "POST"),
+                Pair.of(String.format("%s/roles**", apiPrefix), "GET")
+
         );
+
+        String requestPath = request.getServletPath();
+        String requestMethod = request.getMethod();
+
+        if (requestPath.equals(String.format("%s/orders", apiPrefix))
+                && requestMethod.equals("GET")) {
+            // Allow access to %s/orders
+            return true;
+        }
+
         for (Pair<String, String> bypassToken : bypassTokens) {
             if (request.getServletPath().contains(bypassToken.getFirst()) &&
                     request.getMethod().equals(bypassToken.getSecond())) {

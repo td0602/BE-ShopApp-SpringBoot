@@ -112,3 +112,13 @@ create table order_details(
     total_money float check(total_money >= 0),
     color varchar(20) default ''
 );
+
+
+
+-- Câu lệnh lấy bức ảnh đầu tiên trong chuỗi ảnh để làm ảnh đại diện cho sản phẩm
+UPDATE products
+SET products.thumbnail = (
+	SELECT product_images.image_url
+    FROM product_images
+    WHERE product_images.product_id = products.id LIMIT 1
+);
